@@ -23,11 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('.header');
     window.addEventListener('scroll', () => {
         if(window.scrollY > 50) {
-            header.style.padding = '0.5rem 0';
-            header.style.background = 'rgba(15, 23, 42, 0.95)';
+            header.classList.add('scrolled');
         } else {
-            header.style.padding = '0';
-            header.style.background = 'rgba(15, 23, 42, 0.8)';
+            header.classList.remove('scrolled');
         }
     });
 
@@ -36,17 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelector('.nav-links');
 
     menuToggle.addEventListener('click', () => {
-        navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        if(navLinks.style.display === 'flex') {
-            navLinks.style.position = 'absolute';
-            navLinks.style.top = '80px';
-            navLinks.style.left = '0';
-            navLinks.style.width = '100%';
-            navLinks.style.background = 'var(--bg-dark)';
-            navLinks.style.flexDirection = 'column';
-            navLinks.style.padding = '2rem';
-            navLinks.style.borderBottom = '1px solid var(--border)';
-        }
+        navLinks.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+        
+        // Prevent scroll when menu is open
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
+    });
+
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
     });
 
     // Handle form submission (simulation)

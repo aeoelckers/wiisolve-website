@@ -62,17 +62,28 @@ h1, h2, h3 {
     left: 0;
     width: 100%;
     z-index: 1000;
-    backdrop-filter: blur(10px);
-    background: var(--glass);
-    border-bottom: 1px solid var(--border);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.7); /* White glassmorphism */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav {
-    height: 80px;
+    height: 90px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: height 0.4s ease;
+}
+
+.header.scrolled {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.header.scrolled .nav {
+    height: 70px;
 }
 
 .logo {
@@ -101,10 +112,26 @@ h1, h2, h3 {
 
 .nav-links a {
     text-decoration: none;
-    color: var(--text-main);
-    font-weight: 500;
-    font-size: 0.9rem;
+    color: #0f172a; /* Dark text for readability on white glass */
+    font-weight: 600;
+    font-size: 0.95rem;
     transition: color 0.3s;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary);
+    transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
 }
 
 .nav-links a:hover {
@@ -477,8 +504,44 @@ input:focus, textarea:focus {
 .menu-toggle span {
     width: 30px;
     height: 2px;
-    background: var(--text-main);
+    background: #0f172a; /* Dark toggle */
     transition: all 0.3s;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.menu-toggle.active {
+    z-index: 1001;
+}
+
+/* Mobile Menu Active State */
+.nav-links.active {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    z-index: 999;
+}
+
+.nav-links.active a {
+    font-size: 1.5rem;
 }
 
 /* Responsive */
