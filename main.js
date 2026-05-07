@@ -74,3 +74,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Chatbot Logic
+const chatToggle = document.getElementById('chat-toggle');
+const chatWindow = document.getElementById('chat-window');
+const closeChat = document.getElementById('close-chat');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+const chatBody = document.getElementById('chat-body');
+
+let chatStep = 0;
+const userData = { name: '', company: '', need: '', contact: '' };
+
+chatToggle.addEventListener('click', () => {
+    chatWindow.classList.toggle('active');
+});
+
+closeChat.addEventListener('click', () => {
+    chatWindow.classList.remove('active');
+});
+
+const addMessage = (text, type) => {
+    const msg = document.createElement('div');
+    msg.className = `chat-msg ${type}`;
+    msg.innerText = text;
+    chatBody.appendChild(msg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+};
+
+const handleChat = () => {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, 'user');
+    chatInput.value = '';
+
+    setTimeout(() => {
+        if (chatStep === 0) {
+            userData.name = text;
+            addMessage(`Un gusto, ${text}. ¿De qué empresa nos contactas?`, 'bot');
+            chatStep++;
+        } else if (chatStep === 1) {
+            userData.company = text;
+            addMessage('Excelente. ¿En qué solución o asesoría estás interesado?', 'bot');
+            chatStep++;
+        } else if (chatStep === 2) {
+            userData.need = text;
+            addMessage('Perfecto. Por último, déjanos tu correo o teléfono para contactarte.', 'bot');
+            chatStep++;
+        } else if (chatStep === 3) {
+            userData.contact = text;
+            addMessage('¡Gracias! Un consultor experto de WiiSolve se pondrá en contacto contigo a la brevedad.', 'bot');
+            chatStep++;
+            console.log('Lead Collected:', userData);
+            // Here you could send this data to an API or email
+        }
+    }, 1000);
+};
+
+chatSend.addEventListener('click', handleChat);
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleChat();
+});
